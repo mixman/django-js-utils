@@ -39,7 +39,6 @@ dutils.urls = function(){
     }
 
     return {
-
         resolve: function(name, kwargs, urls) {
             if (!urls)
             {
@@ -48,7 +47,6 @@ dutils.urls = function(){
 
             return _get_path(name, kwargs, urls);
         }
-
     };
 
 }();
