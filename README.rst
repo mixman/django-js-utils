@@ -26,7 +26,7 @@ Installation
 to use the management command)
 
 2. Make sure to set the name of the file that will be generated in django_js_utils/settings.py.
-Default::
+Default:
     # Where to put the Javascript URL Routing file
     URLS_JS_GENERATED_FILE='static/js/dutils.conf.urls.js'
 
@@ -35,12 +35,12 @@ Default::
 
 Usage
 *****
-1. To generate a list of all available urls in the special format::
+1. To generate a list of all available urls in the special format:
     >>> python manage.js js_urls
 
 To keep the list of urls up-to-date, it is recommended to include this command as part of the build process.
 
-2. On the web page, reverse url as such::
+2. On the web page, reverse url as such:
     >>> $.post(dutils.urls.resolve('time_edit', { project_id: 1, time_id: 2 }), ...
 
 
