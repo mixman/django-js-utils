@@ -6,14 +6,44 @@ dutils is a small utility library that aims to provide JavaScript/Django develop
 a few utilities that will help the development of RIA on top of a
 Django Backend.
 
-It currently supports the following features:
+Reversing Django Urls from Javascript
+-------------------------------------
+Why is this useful
+******************
+One of the pillars of Django is DRY principle and hardcoding your urls in Javascript is violating that principle.
+Moreover, building parametrized urls on the fly is error-prone and ugly.
 
-- Reverse method for generating Django urls
+What is included
+****************
+A snippet of Javascript implementation of Django reverse function that can be found in dutils.js
+A management command js_urls to generate a list of all of your Django urls
+
+Installation
+************
+1. Add django_js_utils to your python path and add the django_js_utils application to your INSTALLED_APPS (if you want
+to use the management command)
+2.  Make sure to set the name of the file that will be generated in django_js_utils/settings.py.
+Default::
+    # Where to put the Javascript URL Routing file
+    URLS_JS_GENERATED_FILE='static/js/dutils.conf.urls.js'
+3. Add dutils.js and urls routing Javascript file to every web page where you plan to use the reverse function
+(likely just include in your base.html template)
+
+Usage
+*****
+1. To generate a list of all available urls in the special format::
+  >> python manage.js js_urls
+
+To keep the list of urls up-to-date, it is recommended to include this command as part of the build process.
+
+2.On the web page, reverse url as such::
+  $.post(dutils.urls.resolve('time_edit', { project_id: 1, time_id: 2 }), ...
 
 
-There is planned support for the following features:
+Done!
 
-- Automated client-side form validation
-
-
-If you have ideas for other utilies please let us know.
+TO-DO
+------
+1. Handle the unnamed Django urls that result in <> in urls.js file, but are not handled in Javascript resolver.
+2. Write unit tests
+4. Promote the code
