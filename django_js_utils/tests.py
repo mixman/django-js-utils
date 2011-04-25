@@ -1,3 +1,7 @@
+from django.test import TestCase
+
+class NoUrlName(TestCase):
+    pass
 
 # Test with no urlname
 # Test with args
