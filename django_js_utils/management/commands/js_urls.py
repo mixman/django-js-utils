@@ -44,7 +44,7 @@ class Command(BaseCommand):
 
         for pattern in patterns:
             if issubclass(pattern.__class__, RegexURLPattern):
-                if pattern.name:
+                if pattern.name and pattern.name in app_settings.URLS_JS_TO_EXPOSE:
                     full_url = prefix + pattern.regex.pattern
                     for chr in ["^","$"]:
                         full_url = full_url.replace(chr, "")
@@ -61,5 +61,5 @@ class Command(BaseCommand):
                             full_url = full_url.replace(el, "<>")#replace by a empty parameter name
                     js_patterns[pattern.name] = "/" + full_url
             elif issubclass(pattern.__class__, RegexURLResolver):
-                if pattern.urlconf_name:
+                if pattern.urlconf_name and pattern.urlconf_name in app_settings.URLS_JS_TO_EXPOSE:
                     Command.handle_url_module(js_patterns, pattern.urlconf_name, prefix=pattern.regex.pattern)
