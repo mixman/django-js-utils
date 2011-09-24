@@ -7,7 +7,7 @@ from django.utils import simplejson
 from django.utils.datastructures import SortedDict
 from django.conf import settings as project_settings
 
-from django_js_utils import settings as app_settings
+from django.conf import settings as app_settings
 
 
 RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))") #Pattern for recongnizing named parameters in urls
