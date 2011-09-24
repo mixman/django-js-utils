@@ -1,0 +1,14 @@
+*.py[co]
+*.egg
+*.egg-info
+dist
+build
+pip-log.txt
+.coverage
+.DS_Store
+._*
+media/*
+logs/*
+.ropeproject
+*.db
+*.sqlite
