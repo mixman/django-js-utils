@@ -33,18 +33,25 @@ Example::
 Example::
     URLS_JS_TO_EXPOSE = ['admin', 'another_namespace', 'a_url_name',]
 
-4. Add dutils.js and urls routing Javascript file to every web page where you plan to use the reverse function
-(likely just include in your base.html template)
+4. Add entries into your base.html template (or where ever you need) to include the dutils.js file, along with the dutils.conf.urls.js patterns file. If you're using Django's staticfiles app, you'll use something
+like::
+    <script type="text/javascript" src="{{STATIC_URL}}dutils.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}dutils.conf.urls.js"></script>
+
 
 Usage
 *****
-1. To generate a list of all available urls in the special
+1. Generate a list of all available urls in the special
 format::
-    >>> python manage.js js_urls
+    >>> python manage.py js_urls
 
 To keep the list of urls up-to-date, it is recommended to include this command as part of the build process.
 
-2. On the web page, reverse url as
+2. If you're using Django's staticfiles app, issue the collectstatic command to include dutils.js and the urls list you generated in step 1 in your static
+directory::
+    >>> python manage.py collectstatic
+
+3. On the web page, reverse url as
 such::
     >>> $.post(dutils.urls.resolve('time_edit', { project_id: 1, time_id: 2 }), ...
 
