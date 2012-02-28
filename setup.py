@@ -14,4 +14,5 @@ setup(
     url='https://github.com/Dimitri-Gnidash/django-js-utils',
     packages = find_packages(
         exclude = ['ez_setup', 'examples', 'tests']),
+    package_data = {'django_js_utils': ['static/dutils.js',]},
 )
