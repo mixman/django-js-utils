@@ -6,13 +6,13 @@ from django.core.management.base import BaseCommand
 from django.utils import simplejson
 from django.utils.datastructures import SortedDict
 from django.conf import settings as project_settings
-
-from django.conf import settings as app_settings
-
+from django_js_utils import settings as app_settings
 
 RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))") #Pattern for recongnizing named parameters in urls
 RE_ARG = re.compile(r"(\(.*?\))") #Pattern for recognizing unnamed url parameters
-    
+
+URLS_JS_GENERATED_FILE = getattr(project_settings, 'URLS_JS_GENERATED_FILE', app_settings.URLS_JS_GENERATED_FILE)
+URLS_JS_TO_EXPOSE = getattr(project_settings, 'URLS_JS_TO_EXPOSE', app_settings.URLS_JS_TO_EXPOSE)
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -20,7 +20,6 @@ class Command(BaseCommand):
         Create urls.js file by parsing all of the urlpatterns in the root urls.py file
         """
         js_patterns = SortedDict()
-        URLS_JS_GENERATED_FILE = getattr(project_settings, 'URLS_JS_GENERATED_FILE', app_settings.URLS_JS_GENERATED_FILE)
         print "Generating Javascript urls file %s" % URLS_JS_GENERATED_FILE
         Command.handle_url_module(js_patterns, project_settings.ROOT_URLCONF)
         #output to the file
@@ -46,7 +45,7 @@ class Command(BaseCommand):
 
         for pattern in patterns:
             if issubclass(pattern.__class__, RegexURLPattern):
-                if pattern.name and pattern.name in app_settings.URLS_JS_TO_EXPOSE:
+                if pattern.name and pattern.name in URLS_JS_TO_EXPOSE:
                     full_url = prefix + pattern.regex.pattern
                     for chr in ["^","$"]:
                         full_url = full_url.replace(chr, "")
@@ -63,5 +62,5 @@ class Command(BaseCommand):
                             full_url = full_url.replace(el, "<>")#replace by a empty parameter name
                     js_patterns[pattern.name] = "/" + full_url
             elif issubclass(pattern.__class__, RegexURLResolver):
-                if pattern.urlconf_name and pattern.urlconf_name in app_settings.URLS_JS_TO_EXPOSE:
+                if pattern.urlconf_name and pattern.urlconf_name in URLS_JS_TO_EXPOSE:
                     Command.handle_url_module(js_patterns, pattern.urlconf_name, prefix=pattern.regex.pattern)
