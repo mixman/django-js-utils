@@ -25,8 +25,9 @@ class Command(BaseCommand):
         Command.handle_url_module(js_patterns, project_settings.ROOT_URLCONF)
         #output to the file
         urls_file = open(URLS_JS_GENERATED_FILE, "w")
-        urls_file.write("dutils.conf.urls = ")
+        urls_file.write(";dutils.conf.urls = ")
         simplejson.dump(js_patterns, urls_file)
+        urls_file.write(";")
         print "Done generating Javascript urls file %s" % URLS_JS_GENERATED_FILE
         
     @staticmethod
