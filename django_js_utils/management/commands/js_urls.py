@@ -8,7 +8,7 @@ from django.utils.datastructures import SortedDict
 from django.conf import settings as project_settings
 from django_js_utils import settings as app_settings
 
-RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\))") #Pattern for recongnizing named parameters in urls
+RE_KWARG = re.compile(r"(\(\?P\<(.*?)\>.*?\)\)?)") #Pattern for recongnizing named parameters in urls
 RE_ARG = re.compile(r"(\(.*?\))") #Pattern for recognizing unnamed url parameters
 
 URLS_JS_GENERATED_FILE = getattr(project_settings, 'URLS_JS_GENERATED_FILE', app_settings.URLS_JS_GENERATED_FILE)
