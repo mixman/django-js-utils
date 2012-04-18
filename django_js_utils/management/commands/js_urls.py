@@ -1,6 +1,7 @@
 import sys
 import re
 
+import types
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 from django.core.management.base import BaseCommand
 from django.utils import simplejson
@@ -38,6 +39,9 @@ class Command(BaseCommand):
         if isinstance(module_name, basestring):
             __import__(module_name)
             root_urls = sys.modules[module_name]
+            patterns = root_urls.urlpatterns
+        elif isinstance(module_name, types.ModuleType):
+            root_urls = module_name
             patterns = root_urls.urlpatterns
         else:
             root_urls = module_name
