@@ -67,8 +67,10 @@ class Command(BaseCommand):
                     js_patterns[pattern.name] = "/" + full_url
             elif issubclass(pattern.__class__, RegexURLResolver):
                 if pattern.url_patterns:
-                    if pattern.url_patterns in URLS_JS_TO_EXPOSE:
-                        Command.handle_url_module(js_patterns, pattern.url_patterns, prefix=pattern.regex.pattern)
+                    if (isinstance(pattern.urlconf_name, types.ModuleType)
+                        and pattern.urlconf_name.__name__ not in URLS_JS_TO_EXPOSE):
+                        continue
+                    Command.handle_url_module(js_patterns, pattern.url_patterns, prefix=pattern.regex.pattern)
                 elif pattern.urlconf_name:
                     if pattern.urlconf_name in URLS_JS_TO_EXPOSE:
                         Command.handle_url_module(js_patterns, pattern.urlconf_name, prefix=pattern.regex.pattern)
