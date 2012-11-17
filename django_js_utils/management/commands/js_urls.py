@@ -64,6 +64,8 @@ class Command(BaseCommand):
                     if args_matches:
                         for el in args_matches:
                             full_url = full_url.replace(el, "<>")#replace by a empty parameter name
+                    #unescape escaped chars which are not special sequences
+                    full_url = re.sub(r'\\([^\dAZbBdDsSwW])', r'\1', full_url)
                     js_patterns[pattern.name] = "/" + full_url
             elif issubclass(pattern.__class__, RegexURLResolver):
                 if pattern.url_patterns:
