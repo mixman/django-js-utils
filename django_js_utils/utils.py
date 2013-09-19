@@ -33,13 +33,13 @@ class PatternsParser(object):
 
         for pattern in patterns:
             if issubclass(pattern.__class__, RegexURLPattern):
-                print getattr(pattern, 'name', None)
-                if getattr(pattern, 'name', None) in conf_jsutils.URLS_JS_TO_EXPOSE:
+                val = getattr(pattern, 'name', None) or ''
+                if any(k in val for k in conf_jsutils.URLS_JS_TO_EXPOSE) or any(k in prefix for k in conf_jsutils.URLS_JS_TO_EXPOSE):
                     self.parse_pattern(pattern, prefix)
 
             elif issubclass(pattern.__class__, RegexURLResolver):
                 if pattern.url_patterns:
-                    self.handle_url_module(pattern.url_patterns, prefix=pattern.regex.pattern)
+                    self.handle_url_module(pattern.url_patterns, prefix=prefix+pattern.regex.pattern)
                 elif pattern.urlconf_name:
                     self.handle_url_module(pattern.urlconf_name, prefix=pattern.regex.pattern)
 
