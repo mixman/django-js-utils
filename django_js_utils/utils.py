@@ -2,11 +2,11 @@ import sys
 import re
 import types
 
+from django.conf import settings
 from django.utils.datastructures import SortedDict
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 
 from django_js_utils import conf_jsutils
-
 
 class PatternsParser(object):
     def __init__(self):
@@ -34,7 +34,15 @@ class PatternsParser(object):
         for pattern in patterns:
             if issubclass(pattern.__class__, RegexURLPattern):
                 val = getattr(pattern, 'name', None) or ''
+                if getattr(settings, 'URLS_DEBUG', False):
+                    print "VAL", val
+                    print " PREFIX",prefix
+                    print " PATTERN", pattern.regex.pattern
                 if any(k in val for k in conf_jsutils.URLS_JS_TO_EXPOSE) or any(k in prefix for k in conf_jsutils.URLS_JS_TO_EXPOSE):
+                    if any(k in pattern.regex.pattern for k in settings.URLS_EXCLUDE_PATTERN):
+                        if getattr(settings, 'URLS_DEBUG', False):
+                            print " ! EXCLUDED"
+                        continue
                     self.parse_pattern(pattern, prefix)
 
             elif issubclass(pattern.__class__, RegexURLResolver):
