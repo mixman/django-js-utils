@@ -82,7 +82,6 @@ setup(
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
-        "License :: BSD",
         "Operating System :: OS Independent",
         "Framework :: Django",
         "Programming Language :: Python",
