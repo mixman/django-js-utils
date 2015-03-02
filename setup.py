@@ -62,7 +62,7 @@ class BumpVersion(Command):
 
 
 setup(
-    name='django-js-utils-ng',
+    name='django-js-utils-nextgen',
     version=django_js_utils.__versionstr__,
     description='Django URL Exposure to Javascript',
     long_description=long_description,
