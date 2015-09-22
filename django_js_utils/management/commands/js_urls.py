@@ -14,7 +14,7 @@ class Command(BaseCommand):
         Create urls.js file by parsing all of the urlpatterns in the root urls.py file
         """
 
-        print "Generating Javascript urls file %s" % conf_jsutils.URLS_JS_GENERATED_FILE
+        print("Generating Javascript urls file %s" % conf_jsutils.URLS_JS_GENERATED_FILE)
 
         parser = PatternsParser()
         parser.parse(project_settings.ROOT_URLCONF)
@@ -25,4 +25,4 @@ class Command(BaseCommand):
             json.dump(parser.patterns, f)
             f.write(";")
 
-        print "Done generating Javascript urls file %s" % conf_jsutils.URLS_JS_GENERATED_FILE
+        print("Done generating Javascript urls file %s" % conf_jsutils.URLS_JS_GENERATED_FILE)

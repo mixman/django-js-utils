@@ -8,6 +8,8 @@ from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 
 from django_js_utils import conf_jsutils
 
+import six
+
 class PatternsParser(object):
     def __init__(self):
         self._patterns = SortedDict()
@@ -20,7 +22,7 @@ class PatternsParser(object):
         Load the module and output all of the patterns
         Recurse on the included modules
         """
-        if isinstance(module_name, basestring):
+        if isinstance(module_name, six.string_types):
             __import__(module_name)
             root_urls = sys.modules[module_name]
             patterns = root_urls.urlpatterns
@@ -35,13 +37,13 @@ class PatternsParser(object):
             if issubclass(pattern.__class__, RegexURLPattern):
                 val = getattr(pattern, 'name', None) or ''
                 if getattr(settings, 'URLS_DEBUG', False):
-                    print "VAL", val
-                    print " PREFIX",prefix
-                    print " PATTERN", pattern.regex.pattern
+                    print("VAL", val)
+                    print(" PREFIX",prefix)
+                    print(" PATTERN", pattern.regex.pattern)
                 if any(k in val for k in conf_jsutils.URLS_JS_TO_EXPOSE) or any(k in prefix for k in conf_jsutils.URLS_JS_TO_EXPOSE):
                     if any(k in pattern.regex.pattern for k in settings.URLS_EXCLUDE_PATTERN):
                         if getattr(settings, 'URLS_DEBUG', False):
-                            print " ! EXCLUDED"
+                            print(" ! EXCLUDED")
                         continue
                     self.parse_pattern(pattern, prefix)
 

@@ -8,6 +8,7 @@ import django_js_utils
 
 install_requires = [
     'simplejson',
+    'six',
 ]
 
 tests_require = [
@@ -43,20 +44,20 @@ class BumpVersion(Command):
         initfile = join(dirname(django_js_utils.__file__), '__init__.py')
 
         with open(initfile, 'r') as ifile:
-            print "Reading old package init file..."
+            print("Reading old package init file...")
             istr = ifile.read()
             istr = istr.replace(str(v), str(new_version))
 
         with open(initfile, 'w') as ifile:
-            print "Writing new init file with version %s..." % new_version_str
+            print("Writing new init file with version %s..." % new_version_str)
             ifile.write(istr)
 
         if self.commit:
-            print "Committing version file to VCS..."
+            print("Committing version file to VCS...")
             system('git commit %s -m "Version bump %s"' % (initfile, new_version_str))
 
         if self.tag:
-            print "Creating tag r/%s in VCS..." % new_version_str
+            print("Creating tag r/%s in VCS..." % new_version_str)
             system('git tag r/%s' % new_version_str)
 
 
