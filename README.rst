@@ -22,8 +22,9 @@ A management command js_urls to generate a list of all of your Django urls
 
 Installation
 ************
-1. Add django_js_utils to your python path and add the django_js_utils application to your INSTALLED_APPS (if you want
-to use the management command)
+1. Add django_js_utils application to your INSTALLED_APPS
+Example::
+    INSTALLED_APPS += ('django_js_utils')
 
 2. Set the path and file name to generate urls to inside your django settings file.
 Example::
@@ -31,7 +32,10 @@ Example::
 
 3. Set the url namespaces or names to resolve - only names specified in this list will be resolved to the file
 Example::
-    URLS_JS_TO_EXPOSE = ['admin', 'another_namespace', 'a_url_name',]
+    URLS_INCLUDE_PREFIX = ['^api',]
+    URLS_INCLUDE_PATTERN = ['index','status']
+    URLS_EXCLUDE_PREFIX = ['^internal',]
+    URLS_EXCLUDE_PATTERN = ['index',]
 
 4. Add entries into your base.html template (or where ever you need) to include the dutils.js file, along with the dutils.conf.urls.js patterns file. If you're using Django's staticfiles app, you'll use something
 like::
@@ -53,15 +57,6 @@ directory::
 
 3. On the web page, reverse url as
 such::
-    >>> $.post(dutils.urls.resolve('time_edit', { project_id: 1, time_id: 2 }), ...
+    >>> url('time_edit', {'project_id': 1, time_id: 2}
+    >>> url('time_edit', [1, 2])
 
-For more usage, see example.html
-
-
-TO-DO
-------
-1. Handle the unnamed Django urls that result in <> in urls.js file, but are not handled in Javascript resolver.
-
-2. Write unit tests
-
-3. Promote the code

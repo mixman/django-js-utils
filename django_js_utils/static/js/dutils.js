@@ -1,5 +1,6 @@
 var dutils = {};
 dutils.conf = {};
+dutils.URLS_BASE = '';
 
 dutils.urls = function () {
     function _get_path(name, kwargs, urls) {
@@ -12,13 +13,22 @@ dutils.urls = function () {
         var _path = path;
 
         var key;
-        for (key in kwargs) {
-            if (kwargs.hasOwnProperty(key)) {
-                if (!path.match('<' + key + '>')) {
-                    throw(key + ' does not exist in ' + _path);
-                }
-                path = path.replace('<' + key + '>', kwargs[key]);
-            }
+        if(kwargs instanceof Array) {
+          // [1, 'hello']
+          for (key in kwargs) {
+                var match = path.match('<.+?>') || [];
+                path = path.replace(match[0], kwargs[key]);
+          }
+        } else {
+          // {id:1, name:'hello'}
+          for (key in kwargs) {
+              if (kwargs.hasOwnProperty(key)) {
+                  if (!path.match('<' + key + '>')) {
+                      throw(key + ' does not exist in ' + _path);
+                  }
+                  path = path.replace('<' + key + '>', kwargs[key]);
+              }
+          }
         }
 
         var re = new RegExp('<[a-zA-Z0-9-_]{1,}>', 'g');
@@ -41,3 +51,12 @@ dutils.urls = function () {
     };
 
 }();
+
+function url(name, c) {
+  try {
+    return dutils.URLS_BASE.slice(0,-1) + dutils.urls.resolve(name, c);
+  } catch(e) {
+    console.log("INVALID URLPATTERN", name, c);
+    return '#?invalid='+name;
+  }
+}

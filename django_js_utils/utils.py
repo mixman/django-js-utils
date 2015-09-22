@@ -1,9 +1,11 @@
 import sys
 import re
 import types
+import fnmatch
+
+from collections import OrderedDict
 
 from django.conf import settings
-from django.utils.datastructures import SortedDict
 from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
 
 from django_js_utils import conf_jsutils
@@ -12,7 +14,7 @@ import six
 
 class PatternsParser(object):
     def __init__(self):
-        self._patterns = SortedDict()
+        self._patterns = OrderedDict()
 
     def parse(self, input):
         self.handle_url_module(input)
@@ -33,19 +35,26 @@ class PatternsParser(object):
             root_urls = module_name
             patterns = root_urls
 
+        def match(rule, target):
+            return re.match(rule, target.strip('^$'))
+
+        if any(match(k, prefix) for k in getattr(settings, 'URLS_EXCLUDE_PREFIX', [])):
+            return
+
+        if getattr(settings, 'URLS_INCLUDE_PREFIX', []):
+            if not any(fnmatch.fnmatch(prefix, k) for k in getattr(settings, 'URLS_INCLUDE_PREFIX', [])):
+                return
+
         for pattern in patterns:
+
             if issubclass(pattern.__class__, RegexURLPattern):
                 val = getattr(pattern, 'name', None) or ''
-                if getattr(settings, 'URLS_DEBUG', False):
-                    print("VAL", val)
-                    print(" PREFIX",prefix)
-                    print(" PATTERN", pattern.regex.pattern)
-                if any(k in val for k in conf_jsutils.URLS_JS_TO_EXPOSE) or any(k in prefix for k in conf_jsutils.URLS_JS_TO_EXPOSE):
-                    if any(k in pattern.regex.pattern for k in settings.URLS_EXCLUDE_PATTERN):
-                        if getattr(settings, 'URLS_DEBUG', False):
-                            print(" ! EXCLUDED")
+                if any(k in pattern.regex.pattern for k in getattr(settings, 'URLS_EXCLUDE_PATTERN', [])):
+                    continue
+                if getattr(settings, 'URLS_INCLUDE_PATTERN', []):
+                    if not any(match(k, pattern.regex.pattern) for k in getattr(settings, 'URLS_INCLUDE_PATTERN', [])):
                         continue
-                    self.parse_pattern(pattern, prefix)
+                self.parse_pattern(pattern, prefix)
 
             elif issubclass(pattern.__class__, RegexURLResolver):
                 if pattern.url_patterns:

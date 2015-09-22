@@ -1,8 +1,8 @@
 import subprocess, os
-import simplejson as json
+import json
 
 from django.core.management.base import BaseCommand
-from django.conf import settings as project_settings
+from django.conf import settings
 
 from django_js_utils import conf_jsutils
 from django_js_utils.utils import PatternsParser
@@ -17,9 +17,8 @@ class Command(BaseCommand):
         print("Generating Javascript urls file %s" % conf_jsutils.URLS_JS_GENERATED_FILE)
 
         parser = PatternsParser()
-        parser.parse(project_settings.ROOT_URLCONF)
+        parser.parse(settings.ROOT_URLCONF)
 
-        subprocess.call('mkdir {}'.format(os.path.dirname(conf_jsutils.URLS_JS_GENERATED_FILE)).split())
         with open(conf_jsutils.URLS_JS_GENERATED_FILE, "w+") as f:
             f.write(";dutils.conf.urls = ")
             json.dump(parser.patterns, f)

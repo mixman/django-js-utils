@@ -7,7 +7,6 @@ import django_js_utils
 
 
 install_requires = [
-    'simplejson',
     'six',
 ]
 
@@ -69,7 +68,7 @@ setup(
     long_description=long_description,
     author='Dimitri Gnidash, Jiri Suchan',
     author_email='dimitri.gnidash@gmail.com',
-    url='https://github.com/SanomaCZ/django-js-utils',
+    url='https://github.com/mixman/django-js-utils',
 
     packages=('django_js_utils', ),
     license='BSD',
