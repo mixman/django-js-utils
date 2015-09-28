@@ -38,18 +38,15 @@ class PatternsParser(object):
         def match(rule, target):
             return re.match(rule, target.strip('^$'))
 
-        if any(match(k, prefix) for k in getattr(settings, 'URLS_EXCLUDE_PREFIX', [])):
-            return
-
-        if getattr(settings, 'URLS_INCLUDE_PREFIX', []):
-            if not any(fnmatch.fnmatch(prefix, k) for k in getattr(settings, 'URLS_INCLUDE_PREFIX', [])):
-                return
-
         for pattern in patterns:
-
             if issubclass(pattern.__class__, RegexURLPattern):
+                if any(match(k, prefix) for k in getattr(settings, 'URLS_EXCLUDE_PREFIX', [])):
+                    continue
+                if getattr(settings, 'URLS_INCLUDE_PREFIX', []):
+                    if not any(match(k, prefix) for k in getattr(settings, 'URLS_INCLUDE_PREFIX', [])):
+                        continue
                 val = getattr(pattern, 'name', None) or ''
-                if any(k in pattern.regex.pattern for k in getattr(settings, 'URLS_EXCLUDE_PATTERN', [])):
+                if any(match(k, pattern.regex.pattern) for k in getattr(settings, 'URLS_EXCLUDE_PATTERN', [])):
                     continue
                 if getattr(settings, 'URLS_INCLUDE_PATTERN', []):
                     if not any(match(k, pattern.regex.pattern) for k in getattr(settings, 'URLS_INCLUDE_PATTERN', [])):
