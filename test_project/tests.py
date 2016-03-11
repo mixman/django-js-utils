@@ -53,3 +53,4 @@ class NoUrlName(TestCase):
             parser.parse(settings.ROOT_URLCONF)
             self.assertEquals(parser.patterns,
                 OrderedDict([('model-view', '/model/<model>/<id>')]))
+

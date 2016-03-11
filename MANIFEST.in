@@ -1,9 +1,2 @@
-include MANIFEST.in
-include README.rst
-include setup.py
-recursive-include django_js_utils *
-
-global-exclude .coverage
-global-exclude nosetests.xml
+graft django_js_utils
 global-exclude *.pyc
-global-exclude *.pyo
