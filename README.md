@@ -28,8 +28,10 @@ Installation
 Usage
 -----
 
-1. Create the `URLS_JS_GENERATED_FILE` (for production remember to run `collectstatic`)
-```python manage.py js_urls```
+1. Create the `URLS_JS_GENERATED_FILE` (for production remember to run `collectstatic`):
+```
+    python manage.py js_urls
+```
 
 2. Clientside Django urlpatterns:
 ```
